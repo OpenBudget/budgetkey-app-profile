@@ -9,6 +9,7 @@ import { BudgetKeyCommonModule } from 'budgetkey-ng2-components';
 import { AppComponent } from './app.component';
 
 import {
+  SingleItemComponent,
 } from './components';
 
 
@@ -25,6 +26,7 @@ describe('AppComponent', function () {
       ],
       declarations: [
         AppComponent,
+        SingleItemComponent,
       ],
       providers: [
       ]
