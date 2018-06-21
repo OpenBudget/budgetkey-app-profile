@@ -57,10 +57,15 @@ export class AppComponent implements AfterViewInit {
     this.lists.get(SEARCHES_LIST)
               .subscribe((lc) => {
                 this.items.next(lc.items);
+                this.refreshShareThis();
               });
   }
 
   ngAfterViewInit() {
+    this.refreshShareThis();
+  }
+
+  refreshShareThis() {
     if (window.__sharethis__ && window.__sharethis__.initialize) {
       window.setTimeout(() => {
         window.__sharethis__.initialize();
