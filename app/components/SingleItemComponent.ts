@@ -9,29 +9,44 @@ import * as _ from 'lodash';
   template: ` 
     <div class='row'
          [ngClass]='{sharing: sharing}'>
-        <div class='main'>
-            <span class='emphasis'>
-                {{item.title}}
-            </span>
-            <span class='regular'>
-                {{item.url}}
-            </span>
-            <span class='goto-container' (click)='navigate()'>
-                <span class='goto'>
-                    <ng-container *ngIf='total_results !== null'>
-                        <span *ngIf='total_results < 500'>
-                            {{ total_results }}
-                        </span>
-                        <span *ngIf='total_results >= 500'>
-                            500+
-                        </span>
-                    </ng-container>
-                    <img src='assets/img/left.svg'/>
+        <div class='main-container'>
+            <div class='main'>
+                <span class='emphasis'>
+                    {{item.title}}
                 </span>
-            </span>
-        </div>
-        <div class='sharers'>
-            <div class="sharethis-inline-share-buttons"></div>
+                <span class='regular'>
+                    חיפוש
+                    <ng-container *ngIf='item.properties.displayDocs === "all"'>
+                        כל התוצאות
+                    </ng-container>
+                    <ng-container *ngIf='item.properties.displayDocs !== "all"'>
+                        {{ item.properties.displayDocsDisplay }}
+                    </ng-container>
+                    <ng-container *ngIf='item.properties.timeRange !== "all"'>
+                        עם פעילות במהלך
+                        {{ item.properties.timeRangeDisplay }}
+                    </ng-container>
+                </span>
+                <span class='goto-container' (click)='navigate()'>
+                    <span class='goto'>
+                        <ng-container *ngIf='total_results !== null'>
+                            <span *ngIf='total_results < 500'>
+                                {{ total_results }}
+                            </span>
+                            <span *ngIf='total_results >= 500'>
+                                500+
+                            </span>
+                        </ng-container>
+                        <img src='assets/img/left.svg'/>
+                    </span>
+                </span>
+            </div>
+            <div class='sharers'>
+                <div class="sharethis-inline-share-buttons"
+                    [attr.data-url]="item.url"
+                    [attr.data-title]="item.title"
+                ></div>
+            </div>
         </div>
         <div class='icon share' (click)="share()">
             <img [src]='sharing ? "assets/img/close.svg" : "assets/img/share-2.svg"'/>
@@ -52,7 +67,14 @@ import * as _ from 'lodash';
     align-items: center;
 }
 
+.main-container {
+    width: 770px;
+    position: relative;
+    z-index: 0;
+}
+
 .main {
+    position: relative;
     width: 770px;
     border-radius: 25px;
     background-color: #FF5A5F;
@@ -60,19 +82,21 @@ import * as _ from 'lodash';
     padding: 10px 20px;
     margin-left: 2.5px;
     flex: none;
+    z-index: 2;
 }
 
 .sharers {
-    width: 0px;
-    flex: none;
-    height: auto;
-    z-index: -1;
-    // padding-left: 10px;
-    overflow-x: hidden;
+    right: 560px;
+    top: 0px;
+    width: 210px;
+    position: absolute;
+    height: 50px;
+    padding-top: 9px;
+    z-index: 1;
 }
 
-.main, .sharers {
-    transition-property: width;
+.main {
+    transition-property: width, z-index;
     transition-duration: 0.6s;
 }
 
@@ -80,9 +104,9 @@ import * as _ from 'lodash';
     width: 560px;
 }
 
-.sharing .sharers {
-    width: 210px;
-}
+// .sharing .sharers {
+//     z-index: 1;
+// }
 
 .emphasis {
     color: #FFFFFF;
