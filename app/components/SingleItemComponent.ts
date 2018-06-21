@@ -26,16 +26,18 @@ import * as _ from 'lodash';
                             500+
                         </span>
                     </ng-container>
-                    <img src='/assets/img/left.svg'/>
+                    <img src='assets/img/left.svg'/>
                 </span>
             </span>
         </div>
-        <div class='sharers'></div>
+        <div class='sharers'>
+            <div class="sharethis-inline-share-buttons"></div>
+        </div>
         <div class='icon share' (click)="share()">
-            <img [src]='sharing ? "/assets/img/close.svg" : "/assets/img/share-2.svg"'/>
+            <img [src]='sharing ? "assets/img/close.svg" : "assets/img/share-2.svg"'/>
         </div>
         <div class='icon trash' (click)="delete()">
-            <img src='/assets/img/trash.svg'/>
+            <img src='assets/img/trash.svg'/>
         </div>
     </div>
   `,
@@ -63,7 +65,10 @@ import * as _ from 'lodash';
 .sharers {
     width: 0px;
     flex: none;
-    height: 10px;
+    height: auto;
+    z-index: -1;
+    // padding-left: 10px;
+    overflow-x: hidden;
 }
 
 .main, .sharers {

@@ -1,16 +1,19 @@
-import {Component} from '@angular/core';
+import {Component, AfterViewInit} from '@angular/core';
 import {ListsService, SEARCHES_LIST, ListItem} from 'budgetkey-ng2-components';
 import { BehaviorSubject } from 'rxjs';
+
+declare const window: any;
+
 
 @Component({
   selector: 'my-app',
   template: ` 
       <budgetkey-container [showHeader]="true" [showSearchBar]="true">
         <div>
-          <img class='logo' src='/assets/img/update_stars.svg'/>
+          <img class='logo' src='assets/img/update_stars.svg'/>
           <span class='title'>ההתראות השמורות שלי</span>
           <ng-container *ngFor='let item of (items | async)'>
-            <single-item *ngIf='item.properties && item.properties.term'
+            <single-item *ngIf='item.properties && item.properties.kind==="search"'
                         [item]='item' 
                         (changed)='updateItems()'
             ></single-item>
@@ -42,7 +45,7 @@ div {
 `
   ]
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
 
   private items = new BehaviorSubject<Array<ListItem>>([]);
 
@@ -55,6 +58,19 @@ export class AppComponent {
               .subscribe((lc) => {
                 this.items.next(lc.items);
               });
+  }
+
+  ngAfterViewInit() {
+    if (window.__sharethis__ && window.__sharethis__.initialize) {
+      window.setTimeout(() => {
+        window.__sharethis__.initialize();
+      }, 1000);
+    } else {
+      console.log('Failed to find ShareThis buttons');
+      window.setTimeout(() => {
+        this.ngAfterViewInit();
+      }, 3000);
+    }
   }
 
 }
