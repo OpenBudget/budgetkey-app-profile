@@ -176,7 +176,7 @@ export class SingleItemComponent {
         let URL = 'https://next.obudget.org/search';
         let p = this.item.properties;
         this.http
-            .get(`${URL}/${p.displayDocs}/${encodeURIComponent(p.term)}/${p.startRange}/${p.endRange}/0/0`)
+            .get(`${URL}/${p.displayDocsTypes.join(',')}/${encodeURIComponent(p.term)}/${p.startRange}/${p.endRange}/0/0`)
         .map((r: Response) => r.json())
         .subscribe((ret: any) => {
             let total = 0;
