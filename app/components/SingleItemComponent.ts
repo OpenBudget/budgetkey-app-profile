@@ -175,20 +175,25 @@ export class SingleItemComponent {
     getCurrentResultNum() {
         let URL = 'https://next.obudget.org/search';
         let p = this.item.properties;
+        let config = [
+            {
+                'id': p.displayDocs,
+                'doc_types': p.displayDocsTypes,
+                'filters': p.filters || {}
+            }
+        ];
+        console.log(config);
+        let config_param = encodeURIComponent(JSON.stringify(config));
         this.http
-            .get(`${URL}/${p.displayDocsTypes.join(',')}/${encodeURIComponent(p.term)}/${p.startRange}/${p.endRange}/0/0`)
+            .get(`${URL}/count/${encodeURIComponent(p.term)}/${p.startRange}/${p.endRange}?config=${config_param}`)
         .map((r: Response) => r.json())
         .subscribe((ret: any) => {
-            let total = 0;
             if (ret.search_counts) {
-                let v: any;
-                for (v of _.values(ret.search_counts)) {
-                    if (v.total_overall) {
-                        total += v.total_overall;
-                    }
+                let counts = ret.search_counts[p.displayDocs];
+                if (counts) {
+                    this.total_results = counts.total_overall;
                 }
             }
-            this.total_results = total;
         });
     }
 
