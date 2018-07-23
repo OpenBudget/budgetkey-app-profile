@@ -1,7 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {ListsService, SEARCHES_LIST, ListItem} from 'budgetkey-ng2-components';
 import { Http, Response } from '@angular/http';
-import * as _ from 'lodash';
 
 
 @Component({
@@ -10,7 +9,7 @@ import * as _ from 'lodash';
     <div class='row'
          [ngClass]='{sharing: sharing}'>
         <div class='main-container'>
-            <div class='main'>
+            <div class='main' (click)='navigate()'>
                 <span class='emphasis'>
                     {{item.title}}
                 </span>
@@ -27,7 +26,7 @@ import * as _ from 'lodash';
                         {{ item.properties.timeRangeDisplay }}
                     </ng-container>
                 </span>
-                <span class='goto-container' (click)='navigate()'>
+                <span class='goto-container'>
                     <span class='goto'>
                         <ng-container *ngIf='total_results !== null'>
                             <span *ngIf='total_results < 500'>
@@ -83,6 +82,7 @@ import * as _ from 'lodash';
     margin-left: 2.5px;
     flex: none;
     z-index: 2;
+    cursor: pointer;
 }
 
 .sharers {
@@ -145,7 +145,6 @@ import * as _ from 'lodash';
     margin-right: -30px;
     white-space: nowrap;
     flex: none;
-    cursor: pointer;
 }
 
 .icon {
