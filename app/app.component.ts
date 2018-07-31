@@ -11,7 +11,7 @@ declare const window: any;
   template: ` 
       <budgetkey-container [showHeader]="true" [showSearchBar]="true">
         <div class='main'>
-        <ng-container *ngIf='init && (items | async).length == 0'>
+        <ng-container *ngIf='init && !hasItems'>
           <img class='logo' src='assets/img/update_stars_empty.svg'/>
           <span class='subtitle'>(פה יופיעו)</span>
           <span class='title'>ההתראות השמורות שלי</span>
@@ -24,7 +24,7 @@ declare const window: any;
             <img src='assets/img/no_alerts_stars_transition.svg'/>
           </div>
         </ng-container>
-        <ng-container *ngIf='init && (items | async).length'>
+        <ng-container *ngIf='init && hasItems'>
             <img class='logo' src='assets/img/update_stars.svg'/>
             <span class='title'>ההתראות השמורות שלי</span>
             <ng-container *ngFor='let item of (items | async)'>
@@ -97,6 +97,7 @@ export class AppComponent implements AfterViewInit {
 
   private items = new BehaviorSubject<Array<ListItem>>([]);
   private init = false;
+  private hasItems = false;
 
   constructor(private lists: ListsService, private auth: AuthService) {
     this.updateItems();
@@ -108,6 +109,7 @@ export class AppComponent implements AfterViewInit {
                if (result) {
                 if (!result.authenticated) {
                   this.init = true;
+                  this.hasItems = false;
                   this.items.next([]);
                 }
                }
@@ -115,6 +117,7 @@ export class AppComponent implements AfterViewInit {
     this.lists.get(SEARCHES_LIST)
               .subscribe((lc) => {
                 this.init = true;
+                this.hasItems = !!lc.items;
                 this.items.next(lc.items);
                 this.refreshShareThis();
               });
