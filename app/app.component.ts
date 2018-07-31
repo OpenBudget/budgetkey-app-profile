@@ -103,7 +103,7 @@ export class AppComponent implements AfterViewInit {
   }
 
   updateItems() {
-    this.auth.check('')
+    this.auth.check(window.location.href)
              .subscribe((result) => {
                if (result) {
                 if (!result.authenticated) {
