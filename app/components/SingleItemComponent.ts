@@ -1,5 +1,5 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {ListsService, SEARCHES_LIST, ListItem} from 'budgetkey-ng2-components';
+import {Component, Input, Output, EventEmitter, Inject} from '@angular/core';
+import {ListsService, SEARCHES_LIST, ListItem, THEME_ID_TOKEN} from 'budgetkey-ng2-components';
 import { Http, Response } from '@angular/http';
 
 
@@ -165,10 +165,16 @@ export class SingleItemComponent {
     private total_results: number = null;
 
     constructor(private http: Http,
-                private lists: ListsService) {}
+                private lists: ListsService,
+                @Inject(THEME_ID_TOKEN) private themeId: string) {}
 
     ngOnInit() {
         this.getCurrentResultNum();
+        let params = '';
+        if (this.themeId) {
+            params = '&theme=' + this.themeId;
+        }
+        this.item.url += params;
     }
 
     getCurrentResultNum() {
@@ -181,7 +187,6 @@ export class SingleItemComponent {
                 'filters': p.filters || {}
             }
         ];
-        console.log(config);
         let config_param = encodeURIComponent(JSON.stringify(config));
         this.http
             .get(`${URL}/count/${encodeURIComponent(p.term)}/${p.startRange}/${p.endRange}?config=${config_param}`)
