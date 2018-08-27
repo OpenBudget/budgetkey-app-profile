@@ -1,6 +1,5 @@
-import {Component, Input, Output, EventEmitter, Inject} from '@angular/core';
-import {ListsService, SEARCHES_LIST, ListItem, THEME_ID_TOKEN} from 'budgetkey-ng2-components';
-import { Http, Response } from '@angular/http';
+import {Component, Output, EventEmitter} from '@angular/core';
+import {ListsService, SEARCHES_LIST} from 'budgetkey-ng2-components';
 
 
 @Component({
