@@ -9,7 +9,8 @@ import { BudgetKeyCommonModule, THEME_TOKEN, THEME_ID_TOKEN } from 'budgetkey-ng
 
 import { AppComponent }  from './app.component';
 import {
-  SingleItemComponent
+  SingleItemComponent,
+  DeleteAllItemsComponent
 } from './components';
 
 declare let BUDGETKEY_NG2_COMPONENTS_THEME: any;
@@ -35,6 +36,7 @@ if (typeof(BUDGETKEY_NG2_COMPONENTS_THEME) !== 'undefined') {
   declarations: [
     AppComponent,
     SingleItemComponent,
+    DeleteAllItemsComponent,
   ],
   providers: providers,
   bootstrap: [ AppComponent ]

@@ -1,7 +1,7 @@
 import {Component, AfterViewInit} from '@angular/core';
 import {ListsService, SEARCHES_LIST, ListItem} from 'budgetkey-ng2-components';
 import { BehaviorSubject } from 'rxjs';
-import { AuthService } from '../node_modules/budgetkey-ng2-auth';
+import { AuthService } from 'budgetkey-ng2-auth';
 
 declare const window: any;
 
@@ -11,20 +11,20 @@ declare const window: any;
   template: ` 
       <budgetkey-container [showHeader]="true" [showSearchBar]="true">
         <div class='main'>
-        <ng-container *ngIf='init && !hasItems'>
-          <img class='logo' src='assets/img/update_stars_empty.svg'/>
-          <span class='subtitle'>(פה יופיעו)</span>
-          <span class='title'>ההתראות השמורות שלי</span>
-          <div class='instructions'>
-            <div class='instructions-title'>הגעת לכאן, אבל עוד לא נרשמת להתראות</div>
-            <div class='instructions-subtitle'>
-              אל חשש, בדף תוצאות החיפוש לחיצה קטנה על הכוכב בשורת החיפוש תרשום אותך 
-              לקבלת התראות בדוא״ל שניתן יהיה לערוך בעמוד זה
+          <ng-container *ngIf='init && !hasItems'>
+            <img class='logo' src='assets/img/update_stars_empty.svg'/>
+            <span class='subtitle'>(פה יופיעו)</span>
+            <span class='title'>ההתראות השמורות שלי</span>
+            <div class='instructions'>
+              <div class='instructions-title'>הגעת לכאן, אבל עוד לא נרשמת להתראות</div>
+              <div class='instructions-subtitle'>
+                אל חשש, בדף תוצאות החיפוש לחיצה קטנה על הכוכב בשורת החיפוש תרשום אותך 
+                לקבלת התראות בדוא״ל שניתן יהיה לערוך בעמוד זה
+              </div>
+              <img src='assets/img/no_alerts_stars_transition.svg'/>
             </div>
-            <img src='assets/img/no_alerts_stars_transition.svg'/>
-          </div>
-        </ng-container>
-        <ng-container *ngIf='init && hasItems'>
+          </ng-container>
+          <ng-container *ngIf='init && hasItems'>
             <img class='logo' src='assets/img/update_stars.svg'/>
             <span class='title'>ההתראות השמורות שלי</span>
             <ng-container *ngFor='let item of (items | async)'>
@@ -33,6 +33,7 @@ declare const window: any;
                           (changed)='updateItems()'
               ></single-item>
             </ng-container>
+            <delete-all-items (changed)='updateItems()'></delete-all-items>
           </ng-container>
         </div>
       </budgetkey-container>
@@ -74,7 +75,7 @@ div.main {
   align-items: center;
   background-color: rgba(250,250,250,0.3);
   box-shadow: inset 0 1px 10px 0 rgba(0,0,0,0.05);
-  padding-top: 40px;
+  padding: 40px;
 }
 
 .instructions-title {
@@ -117,7 +118,7 @@ export class AppComponent implements AfterViewInit {
     this.lists.get(SEARCHES_LIST)
               .subscribe((lc) => {
                 this.init = true;
-                this.hasItems = !!lc.items;
+                this.hasItems = lc.items && lc.items.length > 0;
                 this.items.next(lc.items);
                 this.refreshShareThis();
               });

@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 
 import {
   SingleItemComponent,
+  DeleteAllItemsComponent,
 } from './components';
 
 
@@ -27,6 +28,7 @@ describe('AppComponent', function () {
       declarations: [
         AppComponent,
         SingleItemComponent,
+        DeleteAllItemsComponent,
       ],
       providers: [
       ]
