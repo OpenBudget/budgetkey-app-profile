@@ -1,0 +1,28 @@
+<budgetkey-container [showHeader]="true" [showSearchBar]="true">
+  <div class='main'>
+    <ng-container *ngIf='init && !hasItems'>
+      <img class='logo' src='assets/img/update_stars_empty.svg'/>
+      <span class='subtitle'>(פה יופיעו)</span>
+      <span class='title'>ההתראות השמורות שלי</span>
+      <div class='instructions'>
+        <div class='instructions-title'>הגעת לכאן, אבל עוד לא נרשמת להתראות</div>
+        <div class='instructions-subtitle'>
+          אל חשש, בדף תוצאות החיפוש לחיצה קטנה על הכוכב בשורת החיפוש תרשום אותך 
+          לקבלת התראות בדוא״ל שניתן יהיה לערוך בעמוד זה
+        </div>
+        <img src='assets/img/no_alerts_stars_transition.svg'/>
+      </div>
+    </ng-container>
+    <ng-container *ngIf='init && hasItems'>
+      <img class='logo' src='assets/img/update_stars.svg'/>
+      <span class='title'>ההתראות השמורות שלי</span>
+      <ng-container *ngFor='let item of (items | async)'>
+        <app-single-item *ngIf='item.properties && item.properties.kind==="search"'
+                    [item]='item' 
+                    (changed)='updateItems()'
+        ></app-single-item>
+      </ng-container>
+      <app-delete-all-items (changed)='updateItems()'></app-delete-all-items>
+    </ng-container>
+  </div>
+</budgetkey-container>

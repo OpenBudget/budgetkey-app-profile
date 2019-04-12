@@ -4,56 +4,68 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const nunjucks = require('nunjucks');
+const request = require("request");
+const urlencode = require('urlencode');
 
 const basePath = process.env.BASE_PATH || '/';
-const rootPath = path.resolve(__dirname, './dist');
-const disableCache = process.env.DISABLE_CACHE || false;
+const rootPath = path.resolve(__dirname, './dist/budgetkey-app-profile');
+
+const cachedThemes = {};
+const cachedThemeJsons = {};
 
 const app = express();
-if (disableCache) {
-  app.disable('view cache');
-}
+app.use(basePath, express.static(rootPath, {
+  index: false,
+  maxAge: '1d',
+}));
 
 nunjucks.configure(rootPath, {
   autoescape: true,
-  noCache: disableCache,
   express: app
 });
 
 app.set('port', process.env.PORT || 8000);
 
 app.get(basePath + '*', function(req, res) {
-  var filePath = path.resolve(rootPath, req.params[0]);
-  if (fs.existsSync(filePath)) {
-    var stats = fs.lstatSync(filePath);
-    if (stats.isFile()) {
-      return res.sendFile(filePath);
-    }
-  }
+  let injectedScript = '';
 
-  var theme = typeof(req.query.theme) !== "undefined" ? req.query.theme : '';
-  var themeFileName = theme !== '' ? 'theme.'+req.query.theme+'.json' : null;
-  var themeScript = '';
-  if (themeFileName) {
-    var themeJson = null;
+  // set language
+  var lang = typeof(req.query.lang) !== "undefined" ? req.query.lang : 'he';
+  injectedScript += `BUDGETKEY_LANG=${JSON.stringify(lang)};`;
+
+  // set theme
+  var theme = typeof(req.query.theme) !== "undefined" ? req.query.theme : 'budgetkey';
+  var themeFileName = `theme.${theme}.${lang}.json`;
+  let toInject = cachedThemeJsons[themeFileName];
+  let themeJson = cachedThemes[themeFileName];;
+  if (!toInject) {
     // try the themes root directory first - this allows mount multiple themes in a single shared docker volume
     if (fs.existsSync(path.resolve('/themes', themeFileName))) {
       themeJson = JSON.parse(fs.readFileSync(path.resolve('/themes', themeFileName)));
-      // fallback to local file - for local development / testing
+    // fallback to local file - for local development / testing
     } else if (fs.existsSync(path.resolve(__dirname, themeFileName))) {
       themeJson = JSON.parse(fs.readFileSync(path.resolve(__dirname, themeFileName)));
     }
+    toInject = '';
     if (themeJson) {
       for (var key in themeJson) {
-        themeScript += key+"="+JSON.stringify(themeJson[key])+";";
-      }
-      themeScript += "BUDGETKEY_THEME_ID=" + JSON.stringify(req.query.theme) + ";";
+        toInject += `${key}=${JSON.stringify(themeJson[key])};`;
+      }  
     }
+    cachedThemes[themeFileName] = themeJson;
+    cachedThemeJsons[themeFileName] = toInject;
   }
+  injectedScript += toInject;
+  injectedScript += `BUDGETKEY_THEME_ID=${JSON.stringify(req.query.theme)};`;
 
-  var title = 'ההגדרות שלך במפתח התקציב';
+  var siteName = (themeJson && themeJson.BUDGETKEY_APP_GENERIC_ITEM_THEME) ?
+                 themeJson.BUDGETKEY_APP_GENERIC_ITEM_THEME.siteName :
+                 'מפתח התקציב';
+
   res.render('index.html', {
-    themeScript: themeScript, base: basePath, title: title,
+    base: basePath,
+    title: 'ההגדרות שלך ב' + siteName,
+    injectedScript: injectedScript,
     authServerUrl: process.env.AUTH_SERVER_URL
   });
 });

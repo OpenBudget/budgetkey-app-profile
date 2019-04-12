@@ -4,10 +4,10 @@
     <title>{{title}}</title>
     <base href="{{base}}">
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" type="text/css" href="assets/styles/budgetkey-ng2-components.css">
     <link rel="stylesheet" type="text/css" href="//next.obudget.org/_fonts/stylesheet.css"></link>
-    <script>window.authServerUrl="{{ authServerUrl }}";{{ themeScript | safe }}</script>
+    <script>window.authServerUrl="{{ authServerUrl }}";{{ injectedScript | safe }}</script>
     <script type='text/javascript' src='//platform-api.sharethis.com/js/sharethis.js#property=5b2bc4f7a7603d0012fa8881&product=inline-share-buttons' async='async'></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-10203855-10"></script>
     <script>
@@ -20,6 +20,6 @@
   </head>
 
   <body>
-    <my-app></my-app>
+    <app-root></app-root>
   </body>
 </html>
