@@ -21,11 +21,17 @@ export class SingleItemComponent implements OnInit {
 
   ngOnInit() {
     this.getCurrentResultNum();
-    let params = '';
     if (this.themeId) {
-      params = '&theme=' + this.themeId;
+      let search = this.item.url.split('?')[1];
+      if (search) {
+        const params = new URLSearchParams(search);
+        if (!params.get('theme')) {
+          params.set('theme', this.themeId);
+          search = params.toString();
+          this.item.url = this.item.url.split('?')[0] + '?' + search;
+        }
+      }
     }
-    this.item.url += params;
   }
 
   docType() {
