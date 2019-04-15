@@ -66,12 +66,12 @@ export class SingleItemComponent implements OnInit {
 
   timeRangeStart() {
     const p = this.item.properties;
-    return (p.period && p.period.start) || p.startRange;
+    return (p.period && p.period.start) || p.startRange || '1900-01-01';
   }
 
   timeRangeEnd() {
     const p = this.item.properties;
-    return (p.period && p.period.end) || p.endRange;
+    return (p.period && p.period.end) || p.endRange || '2100-12-31';
   }
 
   getCurrentResultNum() {
