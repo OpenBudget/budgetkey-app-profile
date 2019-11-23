@@ -56,12 +56,12 @@ export class SingleItemComponent implements OnInit {
 
   timeRange() {
     const p = this.item.properties;
-    return (p.period && p.period.value) || p.timeRange;
+    return (p.period && p.period.value) || p.timeRange || 'alltime';
   }
 
   timeRangeDisplay() {
     const p = this.item.properties;
-    return (p.period && p.period.title) || p.timeRangeDisplay;
+    return (p.period && p.period.title) || p.timeRangeDisplay || '';
   }
 
   timeRangeStart() {
@@ -86,7 +86,7 @@ export class SingleItemComponent implements OnInit {
     ];
     const config_param = encodeURIComponent(JSON.stringify(config));
     this.http
-        .get(`${URL}/count/${encodeURIComponent(p.term)}/${this.timeRangeStart()}/${this.timeRangeEnd()}?config=${config_param}`)
+        .get(`${URL}/count?q=${encodeURIComponent(p.term)}&&config=${config_param}`)
         .subscribe((ret: any) => {
           if (ret.search_counts) {
             const counts = ret.search_counts[this.docType()];

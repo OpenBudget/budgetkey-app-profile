@@ -1,22 +1,21 @@
-<div class='row'
+<div class='item-row'
       [ngClass]='{sharing: sharing}'>
     <div class='main-container'>
         <div class='main' (click)='navigate()'>
-            <span class='emphasis'>
-                {{item.title}}
-            </span>
-            <span class='regular'>
-                חיפוש
-                <ng-container *ngIf='docType() === "all"'>
-                    כל התוצאות
-                </ng-container>
-                <ng-container *ngIf='docType() !== "all"'>
-                    {{ docTypeDisplay() }}
-                </ng-container>
-                <ng-container *ngIf='timeRange() !== "all"'>
-                    עם פעילות במהלך
-                    {{ timeRangeDisplay() }}
-                </ng-container>
+            <span class='text'>
+                <span class='emphasis'>
+                    {{item.title}}
+                </span>
+                <span class='break'></span>
+                <span class='regular'>
+                    חיפוש
+                    <ng-container *ngIf='docType() === "all"'>
+                        כל התוצאות
+                    </ng-container>
+                    <ng-container *ngIf='docType() !== "all"'>
+                        {{ docTypeDisplay() }}
+                    </ng-container>
+                </span>
             </span>
             <span class='goto-container'>
                 <span class='goto'>
