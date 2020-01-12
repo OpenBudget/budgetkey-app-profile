@@ -15,7 +15,9 @@ export class AppComponent implements AfterViewInit {
 
   private items = new BehaviorSubject<Array<ListItem>>([]);
   private init = false;
+  private authenticated = false;
   private hasItems = false;
+  private loginUrl: string = null;
 
   constructor(private lists: ListsService, private auth: AuthService) {
     this.updateItems();
@@ -24,13 +26,18 @@ export class AppComponent implements AfterViewInit {
   updateItems() {
     this.auth.check(window.location.href)
              .subscribe((result) => {
-               if (result) {
-                if (!result.authenticated) {
-                  this.init = true;
-                  this.hasItems = false;
-                  this.items.next([]);
+                if (result) {
+                  this.authenticated = result.authenticated;
+                  if (!result.authenticated) {
+                    this.init = true;
+                    this.hasItems = false;
+                    this.items.next([]);
+                    const login_href = result.providers && (result.providers.google || result.providers.github);
+                    if (login_href) {
+                        this.loginUrl = login_href.url;
+                    }
+                  }
                 }
-               }
              });
     this.lists.get(SEARCHES_LIST)
               .subscribe((lc) => {

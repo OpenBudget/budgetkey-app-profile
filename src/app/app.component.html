@@ -4,11 +4,23 @@
       <img class='logo' src='assets/img/update_stars_empty.svg'/>
       <span class='subtitle'>(פה יופיעו)</span>
       <span class='title'>ההתראות השמורות שלי</span>
-      <div class='instructions'>
+      <div class='instructions' *ngIf='authenticated'>
         <div class='instructions-title'>הגעת לכאן, אבל עוד לא נרשמת להתראות</div>
         <div class='instructions-subtitle'>
+          <span>
           אל חשש, בדף תוצאות החיפוש לחיצה קטנה על הכוכב בשורת החיפוש תרשום אותך 
           לקבלת התראות בדוא״ל שניתן יהיה לערוך בעמוד זה
+          </span>
+        </div>
+        <img src='assets/img/no_alerts_stars_transition.svg'/>
+      </div>
+      <div class='instructions' *ngIf='!authenticated'>
+        <div class='instructions-title'>הגעת לכאן, אבל עוד לא התחברת למערכת</div>
+        <div class='instructions-subtitle'>
+        <a [href]='loginUrl'><img src='assets/img/google_login.svg'></a>
+        <span class='connect'>התחברו עם גוגל</span>
+        <span>חדשים כאן? אל חשש, בדף תוצאות החיפוש לחיצה קטנה על הכוכב בשורת החיפוש תרשום
+אותך לקבלת התראות בדוא"ל, שניתן יהיה לערוך בעמוד זה</span>
         </div>
         <img src='assets/img/no_alerts_stars_transition.svg'/>
       </div>
